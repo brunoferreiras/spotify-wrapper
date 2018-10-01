@@ -1,7 +1,6 @@
 import chai, { expect } from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
-import sinonStubPromise from 'sinon-stub-promise';
 import {
   describe, it, beforeEach, afterEach,
 } from 'mocha';
@@ -10,7 +9,6 @@ import {
 } from '../src/main';
 
 chai.use(sinonChai);
-sinonStubPromise(sinon);
 
 global.fetch = require('node-fetch');
 
@@ -48,6 +46,7 @@ describe('Spotify Wrapper', () => {
 
     beforeEach(() => {
       fetchedStub = sinon.stub(global, 'fetch');
+      fetchedStub.resolves({ json: () => {} });
     });
 
     afterEach(() => {
@@ -59,7 +58,7 @@ describe('Spotify Wrapper', () => {
       expect(fetchedStub).to.have.been.calledOnce;
     });
 
-    it('should receive the correct URL', () => {
+    it('should call fetch with the correct URL', () => {
       context('passing one type', () => {
         const artists = search('Incubus', 'artists');
 
